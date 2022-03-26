@@ -57,19 +57,18 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
           '@RocketShoes:cart',
           JSON.stringify(upgradeAmountCart)
         );
+      }else{
+        const { data: productData } = await api.get<Product>(`products/${productId}`);
+
+        const cartNewProduct = [...cart, { ...productData, amount: 1 }];
+
+        setCart(cartNewProduct);
+
+        localStorage.setItem(
+          '@RocketShoes:cart',
+          JSON.stringify(cartNewProduct)
+        );
       }
-
-      const { data: productData } = await api.get<Product>(`products/${productId}`);
-
-      const cartNewProduct = [...cart, { ...productData, amount: 1 }];
-
-      setCart(cartNewProduct);
-
-      localStorage.setItem(
-        '@RocketShoes:cart',
-        JSON.stringify(cartNewProduct)
-      );
-
 
     } catch {
       toast.error('Erro na adição do produto');
